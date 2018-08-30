@@ -7,19 +7,27 @@ import java.util.List;
 import java.util.concurrent.*;
 
 /**
- * @ClassName TimeSortedQueue
- * @Description <h1>比如说现有十个任务,分别要求等待0,1,2...9 秒后进行执行</h1>
- * <p>从9开始向队列中放置任务,之后要求输出0,1,2,3....9</p>
+ * @ClassName TaskDelayQueue
+ * @Description <p>
+ * <h1>本示例主要实现了一个延迟的任务队列</h1>
+ * <p>内部类{@link TimeDelay} 用于定义延迟任务的主体</p>
+ * <p>内部类{@link ProducerThread} 任务生产者线程</p>
+ * <p>内部类{@link CustomerThread} 任务消费者线程</p>
+ * <p>
+ * 总共产生10000个任务 每个任务会携带一个随机数,用于标记需要等待的时间.
+ * 单独设置一个list用来存储结果,目的是防止print输出的时候 多线程导致的输出顺序混乱.
+ * </p>
+ * </p>
  * @Author MoreRoom
  * @Since 2018/8/30
  */
-public class TimeSortedQueue {
+public class TaskDelayQueue {
 
     public static void main(String[] args) throws InterruptedException {
         // 消费者线程池
         ExecutorService poolExecutor = new ThreadPoolExecutor(0, 10, 10, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(10000));
         DelayQueue<TimeDelay> taskQueue = new DelayQueue<TimeDelay>();
-        List<Integer> resultList = new ArrayList<>();
+        List<Integer> resultList = new ArrayList<Integer>();
         // 1. 生产线程启动
         new Thread(new ProducerThread(taskQueue)).start();
         // 2. 消费线程启动
@@ -36,7 +44,8 @@ public class TimeSortedQueue {
             }
         }
         for (Integer integer : resultList) {
-            System.out.println(integer == 1 ? integer + "---------" : integer + "");
+//            System.out.println(integer == 1 ? integer + "---------" : integer + "");
+            System.out.println(integer + "");
         }
     }
 
