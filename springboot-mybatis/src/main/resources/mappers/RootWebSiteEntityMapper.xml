@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zspace.mybatis.demo.dao.RootWebsiteDao">
+
+    <resultMap id="BaseResultMap" type="com.zspace.mybatis.demo.entity.RootWebsiteEntity">
+        <id column="ID" property="id" jdbcType="INTEGER"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="LAST_MODIFY_TIME" property="lastModifyTime" jdbcType="TIMESTAMP"/>
+        <result column="VERSION" property="version" jdbcType="INTEGER"/>
+        <result column="WEBSITE_NAME" property="websiteName" jdbcType="VARCHAR"/>
+        <result column="WEBSITE_SHORT_NAME" property="websiteShortName" jdbcType="VARCHAR"/>
+        <result column="WEBSITE_URL" property="websiteUrl" jdbcType="VARCHAR"/>
+        <result column="STATUS" property="status" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ID, CREATE_TIME, LAST_MODIFY_TIME, VERSION, WEBSITE_NAME, WEBSITE_SHORT_NAME, WEBSITE_URL, STATUS
+    </sql>
+
+    <select id="selectRootWebsiteById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM
+            ROOT_WEBSITE
+        WHERE
+            ID = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from root_website where ID = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insertNewRootWebsite" parameterType="com.zspace.mybatis.demo.entity.RootWebsiteEntity">
+        INSERT INTO root_website (
+            CREATE_TIME,
+            LAST_MODIFY_TIME,
+            VERSION,
+            WEBSITE_NAME,
+            WEBSITE_SHORT_NAME,
+            WEBSITE_URL,
+            STATUS
+        ) VALUES (
+            CURRENT_TIMESTAMP,
+            CURRENT_TIMESTAMP,
+            0,
+            #{websiteName,jdbcType=VARCHAR},
+            #{websiteShortName,jdbcType=VARCHAR},
+            #{websiteUrl,jdbcType=VARCHAR},
+            #{status,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.zspace.mybatis.demo.entity.RootWebsiteEntity">
+        insert into root_website
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME,
+            </if>
+            <if test="lastModifyTime != null">
+                LAST_MODIFY_TIME,
+            </if>
+            <if test="version != null">
+                VERSION,
+            </if>
+            <if test="websiteName != null">
+                WEBSITE_NAME,
+            </if>
+            <if test="websiteShortName != null">
+                WEBSITE_SHORT_NAME,
+            </if>
+            <if test="websiteUrl != null">
+                WEBSITE_URL,
+            </if>
+            <if test="status != null">
+                STATUS,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="version != null">
+                #{version,jdbcType=INTEGER},
+            </if>
+            <if test="websiteName != null">
+                #{websiteName,jdbcType=VARCHAR},
+            </if>
+            <if test="websiteShortName != null">
+                #{websiteShortName,jdbcType=VARCHAR},
+            </if>
+            <if test="websiteUrl != null">
+                #{websiteUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.zspace.mybatis.demo.entity.RootWebsiteEntity">
+        update root_website
+        <set>
+            <if test="createTime != null">
+                CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastModifyTime != null">
+                LAST_MODIFY_TIME = #{lastModifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="version != null">
+                VERSION = #{version,jdbcType=INTEGER},
+            </if>
+            <if test="websiteName != null">
+                WEBSITE_NAME = #{websiteName,jdbcType=VARCHAR},
+            </if>
+            <if test="websiteShortName != null">
+                WEBSITE_SHORT_NAME = #{websiteShortName,jdbcType=VARCHAR},
+            </if>
+            <if test="websiteUrl != null">
+                WEBSITE_URL = #{websiteUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.zspace.mybatis.demo.entity.RootWebsiteEntity">
+    update root_website
+    set CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      LAST_MODIFY_TIME = #{lastModifyTime,jdbcType=TIMESTAMP},
+      VERSION = #{version,jdbcType=INTEGER},
+      WEBSITE_NAME = #{websiteName,jdbcType=VARCHAR},
+      WEBSITE_SHORT_NAME = #{websiteShortName,jdbcType=VARCHAR},
+      WEBSITE_URL = #{websiteUrl,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+
+</mapper>
