@@ -1,9 +1,6 @@
 package com.zspace.netty.timer.server;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -44,35 +41,33 @@ public class TimerServer {
 
         @Override
         public void run() {
-            InputStream inputStream = null;
-            OutputStream outputStream = null;
+            BufferedReader bufferedReader = null;
+            PrintWriter printWriter = null;
             ByteArrayOutputStream byteArrayOutputStream = null;
             try {
-                inputStream = socket.getInputStream();
+                bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 byteArrayOutputStream = new ByteArrayOutputStream();
-                byte[] buffer = new byte[1024];
-                int len;
-                while ((len = inputStream.read(buffer)) != -1) {
-                    byteArrayOutputStream.write(buffer, 0, len);
+                String requestString;
+                StringBuffer stringBuffer = new StringBuffer();
+                while (null != (requestString = bufferedReader.readLine())) {
+                    stringBuffer.append(requestString);
                 }
-                String requestString = new String(byteArrayOutputStream.toByteArray());
-                byteArrayOutputStream.flush();
-                outputStream = socket.getOutputStream();
+                printWriter = new PrintWriter(socket.getOutputStream());
                 if (REQUEST_STRING.equalsIgnoreCase(requestString)) {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
-                    outputStream.write(simpleDateFormat.format(new Date()).getBytes());
+                    printWriter.println(simpleDateFormat.format(new Date()).getBytes());
                 } else {
-                    outputStream.write("bad request...".getBytes());
+                    printWriter.println("bad request...".getBytes());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 try {
-                    if (inputStream != null) {
-                        inputStream.close();
+                    if (bufferedReader != null) {
+                        bufferedReader.close();
                     }
-                    if (outputStream != null) {
-                        outputStream.close();
+                    if (printWriter != null) {
+                        printWriter.close();
                     }
                     if (byteArrayOutputStream != null) {
                         byteArrayOutputStream.close();
