@@ -1,5 +1,7 @@
 package com.zspace.netty.timer.server;
 
+import org.springframework.util.StringUtils;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -50,14 +52,17 @@ public class TimerServer {
                 String requestString;
                 StringBuffer stringBuffer = new StringBuffer();
                 while (null != (requestString = bufferedReader.readLine())) {
+                    if (StringUtils.isEmpty(requestString)) {
+                        break;
+                    }
                     stringBuffer.append(requestString);
                 }
-                printWriter = new PrintWriter(socket.getOutputStream());
-                if (REQUEST_STRING.equalsIgnoreCase(requestString)) {
+                printWriter = new PrintWriter(socket.getOutputStream(), true);
+                if (REQUEST_STRING.equalsIgnoreCase(stringBuffer.toString())) {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
-                    printWriter.println(simpleDateFormat.format(new Date()).getBytes());
+                    printWriter.println(simpleDateFormat.format(new Date()));
                 } else {
-                    printWriter.println("bad request...".getBytes());
+                    printWriter.println("bad request...");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
