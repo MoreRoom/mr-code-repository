@@ -12,7 +12,7 @@ public class TimerClient {
 
     private static final int port = 30122;
 
-    private static final String REQUEST_STRING = "query current server time.\r\n";
+    private static final String REQUEST_STRING = "query current server time.";
 
     public static void clientRequest() throws IOException {
         Socket socket = new Socket();
@@ -44,9 +44,4 @@ public class TimerClient {
             }
         }
     }
-
-    public static void main(String[] args) throws IOException {
-        clientRequest();
-    }
-
 }
